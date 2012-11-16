@@ -314,9 +314,13 @@ def find_kicker(a_hand,hand_value):
         return(the_kicker)
 
     if hand_value == 7: ## four of a kind
+#        print(a_hand)
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
+#        print(oct_val)
         the_best_card1 = 14 - oct_val.index("4")
+        oct_val = oct_val.replace("2","1")
+        oct_val = oct_val.replace("3","1")
         kicker_sum = 14 - oct_val.index("1")
         the_kicker = kicker(the_best_card1,kicker_sum)
         return(the_kicker)
@@ -470,7 +474,7 @@ def compare_two_hands_dynamic(first_hand,second_hand,memo):
                     else:
                         return(("Equal",memo))
 
-# Test Bench
+## Test Bench
 #two_card_hand = hand(deck[0:2])
 #straight_flush_hand = hand(deck[0:4]+[deck[4]])
 #pair_hand = hand([deck[0],deck[13],deck[50]]+deck[20:23])
@@ -482,15 +486,15 @@ def compare_two_hands_dynamic(first_hand,second_hand,memo):
 #two_pair_hand = hand([deck[0],deck[13],deck[12],deck[25],deck[1]])
 #three_of_a_kind_hand = hand([deck[0],deck[13],deck[39]]+deck[20:23])
 #high_card_hand = hand([deck[0],deck[1],deck[37]]+deck[20:23])
-
+#
 #this_hand = high_card_hand
 #memo = {}
 #value_test = find_best_hand_dynamic(this_hand,memo)
-#print(this_hand)
+#print(type(this_hand.cards))
 #print(value_test)
 #print(memo)
 #
-#this_hand = this_hand +deck[14]
+#this_hand = this_hand +[deck[14],deck[12]]
 #
 #print(this_hand)
 #value_test = find_best_hand_dynamic(this_hand,memo)

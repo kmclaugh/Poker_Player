@@ -11,6 +11,7 @@
 		0A3A8A07164D897A004F5520 /* Poker_Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Poker_Notes.rtf; sourceTree = "<group>"; };
 		0A3A8A0B164DB357004F5520 /* Poker_Player_Top.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Poker_Player_Top.py; sourceTree = "<group>"; };
 		0A3A8A0C164DB4BB004F5520 /* Hand_Class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Hand_Class.py; sourceTree = "<group>"; };
+		0A3B96451656CF8300DA07ED /* future_probability_dictionary_creator_preflop.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = future_probability_dictionary_creator_preflop.py; sourceTree = "<group>"; };
 		0A5CD69F164F11CA00837A06 /* Poker_Test_Benches.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Poker_Test_Benches.py; sourceTree = "<group>"; };
 		0A7DADFC164DD0D5007079D5 /* full_deck.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = full_deck.dat; sourceTree = "<group>"; };
 		0AA845511652C05000764D68 /* probability_hand_look_up_table_creator.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = probability_hand_look_up_table_creator.py; sourceTree = "<group>"; };
@@ -26,6 +27,7 @@
 				0A3A8A0C164DB4BB004F5520 /* Hand_Class.py */,
 				0A3A8A06164D88AA004F5520 /* Deck_Creator.py */,
 				0AA845511652C05000764D68 /* probability_hand_look_up_table_creator.py */,
+				0A3B96451656CF8300DA07ED /* future_probability_dictionary_creator_preflop.py */,
 				0AA84559165485BE00764D68 /* Poker_Probability_Modules.py */,
 				0A7DADFC164DD0D5007079D5 /* full_deck.dat */,
 				0A3A8A07164D897A004F5520 /* Poker_Notes.rtf */,

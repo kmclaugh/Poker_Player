@@ -7,12 +7,12 @@
 		<key>Deck_Creator.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>5</integer>
 		</dict>
 		<key>Hand_Class.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>4</integer>
 		</dict>
 		<key>Poker_Player_Top.xcscheme</key>
 		<dict>
@@ -20,6 +20,11 @@
 			<integer>0</integer>
 		</dict>
 		<key>Poker_Probability_Modules.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>future_probability_dictionary_creator_preflop.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>

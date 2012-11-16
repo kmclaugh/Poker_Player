@@ -10,7 +10,7 @@ import subprocess
 from itertools import combinations
 from datetime import *
 
-deck = load_deck()
+
 
 
 ## removes a given cards from a the deck and returns a new deck. This helps to preserve the complete deck and solves some error with .remove that I could not solve.
@@ -25,6 +25,7 @@ def remove_card_from_deck(deck,card):
 
 ## iterates through all poosible two card starting hands to determine the probability that that hand is the best against one other player and stores the information for all possible starting hands in a dictionary, where the key is the hand's crunched binary format. Stores the dictionary in a pickle binary file
 def create_two_player_current_dictionary():
+    deck = load_deck()
     current_probability_dictionary_two_players = {}
     my_possible_starting_hands = list(combinations(deck,2))
     for my_hand in my_possible_starting_hands:
