@@ -171,6 +171,14 @@ def make_deck(binary_cards,string_cards,octal_cards):
         deck.append(the_card)
     return(deck)
 
+## Defines a method for retrieving the deck from the pickled file.
+def load_deck():
+    deck_file_location = "/Users/kevin/Desktop/10% Time/Poker_Player/full_deck.dat"
+    deck_file = open(deck_file_location,"rb")
+    deck = pickle.load(deck_file)
+    deck_file.close()
+    return(deck)
+
 
 #cards_bin = binary_numbers_cards()
 #cards_suit = bin_numbers_with_suits()

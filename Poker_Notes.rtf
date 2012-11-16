@@ -12,10 +12,44 @@ The octal is for calulcating hand values that are unrelated to suit. This drasti
 \
 The binary deck makes it easy to find straight flushes, flushes, ect. Simply scanning through the binary string is much faster than trying to read hands as a human would.\
 \
-Link about operator overloading:\
+Links about operator overloading:\
 {\field{\*\fldinst{HYPERLINK "http://rgruet.free.fr/PQR26/PQR2.6.html#SpecialMethods"}}{\fldrslt http://rgruet.free.fr/PQR26/PQR2.6.html#SpecialMethods}}\
+{\field{\*\fldinst{HYPERLINK "http://www.gidnetwork.com/b-137.html"}}{\fldrslt http://www.gidnetwork.com/b-137.html}}\
 \
 It's worth noting that the number on the face of the card does not correspond to the number of the card in binary. For example the two of clubs has the value 1 in  binary\
+\
+Dictionary without ties pre-defined\
+\pard\tx529\pardeftab529\pardirnatural
+
+\f1\b\fs22 \cf0 \CocoaLigature0 [|2, Clubs|, |3, Clubs|]\
+0.007346938775510204
+\f0\b0\fs24 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Dictionary with ties pre-defined:\
+\pard\tx529\pardeftab529\pardirnatural
+
+\f1\b\fs22 \cf0 \CocoaLigature0 [|2, Clubs|, |3, Clubs|]\
+0.007346938775510204
+\f0\b0\fs24 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Monte Carlo without dynamic logic for 1 million hands\
+201.67006 seconds\
+Monte Carlo without dynamic logic for 1 million hands\
+173.28747 seconds\
+\
+Hand Value Numbers\
+\
+0 - high card\
+1 - pair\
+2 - two pair\
+3 - three of a kind\
+4 - straight\
+5 - flush\
+6 - full house\
+7 - four of a kind\
+8 - straight flush\
+\
 \
 indices of cards in the deck with values:\
 \
