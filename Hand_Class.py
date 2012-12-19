@@ -26,6 +26,11 @@ class hand():
         new_value = hand((self.cards + [x]),self.value,self.card1,self.card2,self.kicker)
         return(new_value)
     
+    def add_community_cards(self,the_community_cards):
+        for a_card in the_community_cards:
+            self.cards = self.cards + [a_card]
+
+    
     def __len__(self):
         return(len(self.cards))
     
@@ -221,7 +226,7 @@ class kicker:
 
 ## Defines the method for finding both the highest card of the cards used to make the value of the hand (ie straight, ace-high), and the sum of the kicker cards for easy comprison should the value of two hands and the highest card both be equal. For example if player both have a pair of twos and one has an ace and the other a king, the kicker sum of the Ace will be higher.
 def find_kicker(a_hand,hand_value):
-    
+
     if hand_value == 0: ## High card
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
@@ -288,7 +293,6 @@ def find_kicker(a_hand,hand_value):
 
     if hand_value == 5: ## flush
         suites = a_hand.returnsuits()
-
         for suite in suites:
             count = 0
             for location in suite:
@@ -296,8 +300,15 @@ def find_kicker(a_hand,hand_value):
                     count += 1
                 if count > 2:
                     the_best_card1 = 14 - suite.index("1")
+                    suite  = suite.replace("1","0",1)
+                    the_best_card2 = 14 - suite.index("1")
+                    suite  = suite.replace("1","0",1)
+                    kicker_sum = 0
+                    for y in range(0,3):
+                        kicker_sum += 14 - suite.index("1")
+                        suite  = suite.replace("1","0",1)
                     break
-        the_kicker = kicker(the_best_card1)
+        the_kicker = kicker(the_best_card1,kicker_sum,the_best_card2)
         return(the_kicker)
 
     if hand_value == 6: ## full house
@@ -340,6 +351,14 @@ def find_kicker(a_hand,hand_value):
                     break
         the_kicker = kicker(the_best_card1)
         return(the_kicker)
+
+def assign_all_hand_values(a_hand):
+    a_hand.value = find_best_hand(a_hand)
+    a_kicker = find_kicker(a_hand,a_hand.value)
+    a_hand.card1 = a_kicker.best_card1
+    a_hand.card2 = a_kicker.best_card2
+    a_hand.kicker = a_kicker.kicker_sum
+    return(a_hand)
 
 def compare_two_hands(first_hand,second_hand):
     if first_hand.value == "Not Assigned":
@@ -402,6 +421,8 @@ def compare_two_hands(first_hand,second_hand):
                         return(second_hand)
                     else:
                         return("Equal")
+
+
 
 def compare_two_hands_dynamic(first_hand,second_hand,memo):
     
@@ -486,14 +507,16 @@ def compare_two_hands_dynamic(first_hand,second_hand,memo):
 #two_pair_hand = hand([deck[0],deck[13],deck[12],deck[25],deck[1]])
 #three_of_a_kind_hand = hand([deck[0],deck[13],deck[39]]+deck[20:23])
 #high_card_hand = hand([deck[0],deck[1],deck[37]]+deck[20:23])
-#
-#this_hand = high_card_hand
+##
+#this_hand = flush_hand + deck[10]
 #memo = {}
-#value_test = find_best_hand_dynamic(this_hand,memo)
-#print(type(this_hand.cards))
-#print(value_test)
-#print(memo)
-#
+#this_hand.value = find_best_hand(this_hand)
+#print(this_hand.cards)
+#print(this_hand.value)
+#the_kicker = find_kicker(this_hand,this_hand.value)
+#print(the_kicker)
+
+
 #this_hand = this_hand +[deck[14],deck[12]]
 #
 #print(this_hand)

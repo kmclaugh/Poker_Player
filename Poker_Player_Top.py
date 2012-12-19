@@ -25,6 +25,6 @@ print(test_hand)
 
 
 print(prob_dict[test_hand.crunch_binary()])
-test = montecarlo_probability_test_best_hand_module_dynamic(test_hand,1,100000)
+test = montecarlo_probability_test_best_hand_module_dynamic(test_hand,1,100)
 print(test)
 

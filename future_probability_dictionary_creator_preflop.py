@@ -28,9 +28,9 @@ def create_future_probability_dictionary():
     print(start_time)
     
     future_probability_dictionary = {}
-    dynamic_memo = {}
 #    my_possible_starting_hands = list(combinations(deck,2))
     my_possible_starting_hands = [(deck[12],deck[25])]
+    print(my_possible_starting_hands)
     for my_hand in my_possible_starting_hands:
         hands_I_won = 0
         total_hands_played = 0
@@ -68,9 +68,7 @@ def create_future_probability_dictionary():
                 opponent_hand = hand(list(opponent_hand))
                 opponent_hand = hand(opponent_hand.cards + community_cards.cards)
 
-                dynamic_values = compare_two_hands_dynamic(my_hand,opponent_hand,dynamic_memo)
-                the_winning_hand = dynamic_values[0]
-                dynamic_memo = dynamic_values[1]
+                the_winning_hand = compare_two_hands(my_hand,opponent_hand)
                 if the_winning_hand != "Equal":
                     if the_winning_hand.crunch_binary() != opponent_hand.crunch_binary():
                         hands_I_won += 1
@@ -89,7 +87,7 @@ def create_future_probability_dictionary():
     print(totaltime)
             
     current_directory = os.getcwd()
-    dictionary_file_location = "{}/future_probability_dictionary.dat".current_directory
+    dictionary_file_location = "{}/future_probability_dictionary.dat".format(current_directory)
     dictionary_file = open(dictionary_file_location,"wb")
     pickle.dump(future_probability_dictionary,dictionary_file)
     dictionary_file.close()

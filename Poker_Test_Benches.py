@@ -121,45 +121,46 @@ def montecarlo_probability_test_best_hand_module(a_hand,number_of_players, numbe
     probability = hands_I_won/total_hands_played
     return(probability)
 
-def montecarlo_probability_test_best_hand_module_dynamic(a_hand,number_of_players, number_of_trails):
-    
-    start_time = datetime.now()
-    print(start_time)
+
+
+def montecarlo_probability_river_simulator(a_hand,trails):
     
     deck = load_deck()
+
     new_deck = remove_card_from_deck(deck,a_hand.cards[0])
     new_deck = remove_card_from_deck(new_deck,a_hand.cards[1])
     
     hands_I_won = 0
     total_hands_played = 0
-    the_memo = {}
-    for trail in range(0,number_of_trails):
+    
+    for trail in range(0,trails):
         shuffle(new_deck)
-        other_players_hands = []
-        iterator = 0
-        for a_player in range(0,number_of_players):
-            this_players_hand = []
-            for a_card in range(0,len(a_hand)):
-                this_players_hand.append(new_deck[iterator])
-                iterator += 1
-            this_players_hand = hand(this_players_hand)
-            other_players_hands.append(this_players_hand)
-        for opponent_hand in other_players_hands:
-            dynamic_values = compare_two_hands_dynamic(a_hand,opponent_hand,the_memo)
-            the_winning_hand = dynamic_values[0]
-            the_memo = dynamic_values[1]
-            if the_winning_hand != "Equal":
-                if the_winning_hand.cards != opponent_hand.cards:
-                    hands_I_won += 1
-            else:
+        the_opponent_hand = hand(new_deck[0:2])
+        community_cards = hand(new_deck[2:7])
+
+        
+        my_hand = hand(a_hand.cards + community_cards.cards)
+        opponent_hand = hand(the_opponent_hand.cards + community_cards.cards)
+        the_winning_hand = compare_two_hands(my_hand,opponent_hand)
+        if the_winning_hand != "Equal":
+            if the_winning_hand.cards != opponent_hand.cards:
                 hands_I_won += 1
-            total_hands_played += 1
-    
-    end_time = datetime.now()
-    totaltime = end_time - start_time
-    print(totaltime)
-    
+#                print(the_winning_hand.value)
+#                print(("my hand",my_hand))
+#                print(("op",opponent_hand))
+            else:
+                pass
+        else:
+            hands_I_won += 1
+        total_hands_played += 1
+
     probability = hands_I_won/total_hands_played
     return(probability)
+
+#test_hand = hand([deck[7],deck[15]])
+#print(test_hand)
+#test = montecarlo_probability_river_simulator(test_hand,100000)
+#print(test)
+
 
 

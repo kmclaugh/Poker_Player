@@ -71,9 +71,9 @@ def create_two_player_current_dictionary():
 #    dictionary_file = open(dictionary_file_location,"wb")
 #    pickle.dump(current_probability_dictionary_two_players,dictionary_file)
 #    dictionary_file.close()
-#
-#
-### Use this to rewrite the dictionary
+
+
+## Use this to rewrite the dictionary
 #create_two_player_current_dictionary()
 
 

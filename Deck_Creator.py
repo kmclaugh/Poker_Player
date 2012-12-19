@@ -180,6 +180,14 @@ def load_deck():
     return(deck)
 
 
+def remove_card_from_deck(deck,card):
+    new_deck = []
+    
+    for a_card in deck:
+        if a_card.binary != card.binary:
+            new_deck.append(a_card)
+    return(new_deck)
+
 #cards_bin = binary_numbers_cards()
 #cards_suit = bin_numbers_with_suits()
 #cards_octals = create_octals()
