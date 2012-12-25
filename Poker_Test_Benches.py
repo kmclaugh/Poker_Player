@@ -107,7 +107,7 @@ def montecarlo_probability_test_best_hand_module(a_hand,number_of_players, numbe
             other_players_hands.append(this_players_hand)
         for opponent_hand in other_players_hands:
             the_winning_hand = compare_two_hands(a_hand,opponent_hand)
-            if the_winning_hand != "Equal":
+            if the_winning_hand != "tie":
                 if the_winning_hand.cards != opponent_hand.cards:
                     hands_I_won += 1
             else:
@@ -142,7 +142,7 @@ def montecarlo_probability_river_simulator(a_hand,trails):
         my_hand = hand(a_hand.cards + community_cards.cards)
         opponent_hand = hand(the_opponent_hand.cards + community_cards.cards)
         the_winning_hand = compare_two_hands(my_hand,opponent_hand)
-        if the_winning_hand != "Equal":
+        if the_winning_hand != "tie":
             if the_winning_hand.cards != opponent_hand.cards:
                 hands_I_won += 1
 #                print(the_winning_hand.value)
@@ -159,7 +159,7 @@ def montecarlo_probability_river_simulator(a_hand,trails):
 
 #test_hand = hand([deck[7],deck[15]])
 #print(test_hand)
-#test = montecarlo_probability_river_simulator(test_hand,100000)
+#test = montecarlo_probability_river_simulator(test_hand,100)
 #print(test)
 
 

@@ -22,6 +22,37 @@ def deal_cards_to_players(players):
     current_deck = deck[counter:]
     return((players_with_hands,current_deck))
 
+def deal_TEST_cards_to_players(players):
+    ## Load the deck from the pickle file
+    deck = load_deck()
+    players_with_hands = []
+    counter = 0
+    ## Test hands go here
+    test_hand1 = hand(deck[0:2])
+    used_cards = test_hand1.cards
+    test_hand2 = hand(deck[0:2])
+    used_cards = used_cards + test_hand2.cards
+    test_hand3 = hand([deck[0],deck[25]])
+    used_cards = used_cards + test_hand3.cards
+    test_hand4 = hand([deck[0],deck[25]])
+    used_cards = used_cards + test_hand4.cards
+    test_hand5 = hand([deck[1],deck[30]])
+    used_cards = used_cards + test_hand5.cards
+    test_hand6 = hand(deck[0:2])
+    used_cards = used_cards + test_hand6.cards
+    test_hand7 = hand(deck[0:2])
+    used_cards = used_cards + test_hand7.cards
+    test_hands = [test_hand1,test_hand2,
+                  test_hand3,test_hand4,test_hand5,test_hand6,test_hand7]
+    
+    for player in players:
+        player.hand = test_hands[counter]
+        players_with_hands.append(player)
+        counter += 1
+    
+    current_deck = [deck[18],deck[3],deck[37],deck[7],deck[9]] ##test community cards
+    return((players_with_hands,current_deck))
+
 ## deals out a given number of community cards and returns the cards and current deck
 def deal_community_cards(number_of_cards_to_be_dealt,current_deck):
     community_cards = current_deck[0:number_of_cards_to_be_dealt] ##the new community cards
@@ -172,8 +203,11 @@ def action_logic(players_left,community_cards,pot,raise_amount,raise_cap,print_a
                 for a_folder in remove_list:
                     players_left.remove(a_folder)
                 return([players_left,pot])
-    for a_folder in remove_list:
-        players_left.remove(a_folder)
+
+        for a_folder in remove_list:
+            players_left.remove(a_folder)
+        remove_list = []
+            
     return([players_left,pot])
 
 ## Adds the community cards to each player's hand.
@@ -182,12 +216,12 @@ def add_community_cards_to_all_players(a_list_of_players,the_community_cards):
         a_player.hand.add_community_cards(the_community_cards)
     return(a_list_of_players)
 
-## Compares a list of players with hands and returns the winner
+## Compares a list of players with hands without assigned values and returns the winner
 def compare_multiple_player_hands(a_list_of_players):
     for a_player in a_list_of_players:
         a_player.hand = assign_all_hand_values(a_player.hand)
     a_list_of_players = sorted(a_list_of_players, key=lambda player: player.hand.value,reverse=True)
-    best_value = a_list_of_players[0].hand.value ##error here for some reason
+    best_value = a_list_of_players[0].hand.value
     best_value_players = []
     for a_player in a_list_of_players:
         if a_player.hand.value == best_value:
@@ -195,35 +229,16 @@ def compare_multiple_player_hands(a_list_of_players):
     if len(best_value_players) == 1:
         winner = best_value_players[0]
     else:
-        best_value_players = sorted(best_value_players, key=lambda player: player.hand.card1, reverse=True)
-        best_card1 = best_value_players[0].hand.card1
-        best_card1_players = []
-        for a_player in best_value_players:
-            if a_player.hand.card1 == best_card1:
-                best_card1_players.append(a_player)
-        if len(best_card1_players) == 1:
-            winner = best_card1_players[0]
+        a_list_of_players = sorted(a_list_of_players, key=lambda player: player.hand.card_order,reverse=True)
+        the_best_card_order = a_list_of_players[0].hand.card_order
+        winning_player = []
+        for a_player in a_list_of_players:
+            if a_player.hand.card_order == the_best_card_order:
+                winning_player.append(a_player)
+        if len(winning_player) == 1:
+            winner = winning_player[0]
         else:
-            best_card1_players = sorted(best_card1_players, key=lambda player: player.hand.card2, reverse=True)
-            best_card2 = best_card1_players[0].hand.card2
-            best_card2_players = []
-            for a_player in best_card1_players:
-                if a_player.hand.card2 == best_card2:
-                    best_card2_players.append(a_player)
-            if len(best_card2_players) == 1:
-                winner = best_card2_players[0]
-            else:
-                best_card2_players = sorted(best_card2_players, key=lambda player: player.hand.kicker, reverse=True)
-                best_kicker = best_card2_players[0].hand.kicker
-                best_kicker_players = []
-                for a_player in best_card2_players:
-                    if a_player.hand.kicker == best_kicker:
-                        best_kicker_players.append(a_player)
-                if len(best_kicker_players) == 1:
-                    winner = best_kicker_players[0]
-                else:
-                    winner = best_kicker_players
-
+            winner = winning_player
     return(winner)
 
 ## defines the event for a single deal of cards. ie from the dealing of cards through showdown, if necessary. Awards the winner the pot and returns the list of players with the 

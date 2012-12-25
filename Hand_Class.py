@@ -10,12 +10,10 @@ deck = pickle.load(the_deck_file)
 
 class hand():
     
-    def __init__(self,the_list,the_value = "Not Assigned",the_best_card1=0, the_best_card2=0, the_kicker=0):
+    def __init__(self,the_list,the_value = "Not Assigned",the_card_order = []):
         self.cards = the_list
         self.value = the_value
-        self.card1 = the_best_card1
-        self.card2 = the_best_card2
-        self.kicker = the_kicker
+        self.card_order = the_card_order
     
     def __str__(self):
         return(self.cards.__str__())
@@ -23,12 +21,13 @@ class hand():
         return(self.cards.__repr__())
     
     def __add__(self,x):
-        new_value = hand((self.cards + [x]),self.value,self.card1,self.card2,self.kicker)
+        new_value = hand((self.cards + [x]),self.value,self.card_order)
         return(new_value)
     
     def add_community_cards(self,the_community_cards):
         for a_card in the_community_cards:
             self.cards = self.cards + [a_card]
+        return(self)
 
     
     def __len__(self):
@@ -166,129 +165,68 @@ def find_best_hand(a_hand):
     else:
         return(0)
 
-def find_best_hand_dynamic(a_hand,memo):
-    oct_val = a_hand.crunch_octal()
-    
-    if find_straight_flush(a_hand) == True:
-        return((8,memo))
-    
-    elif find_four_of_a_kind(a_hand) == True:
-        return((7,memo))
-    
-    elif find_full_house(a_hand) == True:
-        return((6,memo))
-    
-    elif find_flush(a_hand) == True:
-        return((5,memo))
 
-    
-    elif oct_val in memo:
-        return((memo[oct_val],memo))
-
-    elif find_straight(a_hand) == True:
-        memo[oct_val] = 4
-        return((4,memo))
-    
-    elif find_three_of_a_kind(a_hand) == True:
-        memo[oct_val] = 3
-        return((3,memo))
-    
-    elif find_two_pair(a_hand) == True:
-        memo[oct_val] = 2
-        return((2,memo))
-    
-    elif find_pair(a_hand) == True:
-        memo[oct_val] = 1
-        return((1,memo))
-    
-    else:
-        memo[oct_val] = 0
-        return((0,memo))
-
-class kicker:
-
-    def __init__(self, high_card_of_value_cards_one , sum_of_kicker_cards=0, high_card_of_value_cards_two = 0):
-        self.best_card1 = high_card_of_value_cards_one
-        self.best_card2 = high_card_of_value_cards_two
-        self.kicker_sum = sum_of_kicker_cards
-
-    def __str__(self):
-        if self.best_card2 == 0:
-            return ("best card: {}, kicker sum: {}".format(self.best_card1, self.kicker_sum))
-        else:
-            return("best card1: {}, best card2: {}, kicker sum: {}".format(self.best_card1,self.best_card2,self.kicker_sum))
-
-    def __repr__(self):
-        if self.best_card2 == 0:
-            return ("best card: {}, kicker sum: {}".format(self.best_card1, self.kicker_sum))
-        else:
-            return("best card1: {}, best card2: {}, kicker sum: {}".format(self.best_card1,self.best_card2,self.kicker_sum))
 
 ## Defines the method for finding both the highest card of the cards used to make the value of the hand (ie straight, ace-high), and the sum of the kicker cards for easy comprison should the value of two hands and the highest card both be equal. For example if player both have a pair of twos and one has an ace and the other a king, the kicker sum of the Ace will be higher.
-def find_kicker(a_hand,hand_value):
+def find_card_order(a_hand,hand_value):
 
     if hand_value == 0: ## High card
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
-        kicker_sum = 0
-        for y in range(0,5):
-            if oct_val != "0000000000000":
-                kicker_sum += 14 - oct_val.index("1")
-                oct_val = oct_val.replace("1","0",1)
-            else:
-                break
-        the_best_card1 = 0 
-        the_kicker = kicker(the_best_card1,kicker_sum)
-        return(the_kicker)
+        card_order = []
+        counter = 0
+        while oct_val != "0000000000000" and counter < 5:
+            this_card = 14 - oct_val.index("1")
+            card_order.append(this_card)
+            oct_val = oct_val.replace("1","0",1)
+            counter += 1
+        return(card_order)
     
     if hand_value == 1: ## pair
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
-        the_best_card1 = 14 - oct_val.index("2")
+        the_pair_card = 14 - oct_val.index("2")
         oct_val = oct_val.replace("2","0")
-        kicker_sum = 0
-        for y in range(0,3):
-            if oct_val != "0000000000000":
-                kicker_sum += 14 - oct_val.index("1")
-                oct_val = oct_val.replace("1","0",1)
-            else:
-                break
-        the_kicker = kicker(the_best_card1,kicker_sum)
-        return(the_kicker)
+        card_order = [the_pair_card]
+        counter = 0
+        while oct_val != "0000000000000" and counter <3:
+            this_card = 14 - oct_val.index("1")
+            card_order.append(this_card)
+            oct_val = oct_val.replace("1","0",1)
+            counter += 1
+        return(card_order)
 
     if hand_value == 2: ## two pair
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
-        the_best_card1 = 14 - oct_val.index("2")
+        pair_card1 = 14 - oct_val.index("2")
         oct_val = oct_val.replace("2","0",1)
-        the_best_card2 = 14 - oct_val.index("2")
-        kicker_sum = 14 - oct_val.index("1")
-        the_kicker = kicker(the_best_card1,kicker_sum,the_best_card2)
-        return(the_kicker)
+        pair_card2 = 14 - oct_val.index("2")
+        kicker_card = 14 - oct_val.index("1")
+        card_order = [pair_card1,pair_card2,kicker_card]
+        return(card_order)
 
     if hand_value == 3: ## three of a kind
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
-        the_best_card1 = 14 - oct_val.index("3")
-        kicker_sum = 0
-        for y in range(0,2):
-            kicker_sum += 14 - oct_val.index("1")
-            oct_val = oct_val.replace("1","0",1)
-        the_kicker = kicker(the_best_card1,kicker_sum)
-        return(the_kicker)
+        three_card = 14 - oct_val.index("3")
+        kicker_card1 = 14 - oct_val.index("1")
+        oct_val = oct_val.replace("1","0",1)
+        kicker_card2 = 14 - oct_val.index("1")
+        card_order = [three_card,kicker_card1,kicker_card2]
+        return(card_order)
 
     if hand_value == 4: ## straight
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:].replace("2","1")
         oct_val = oct_val.replace("3","1")
         if oct_val == "1000000001111":
-            the_best_card1 = 5
-            the_kicker = kicker(the_best_card1)
-            return(the_kicker)
+            card_order = [5]
+            return(card_order)
         else:
-            the_best_card1 = 14 - oct_val.index("1")
-            the_kicker = kicker(the_best_card1)
-            return(the_kicker)
+            high_card = 14-oct_val.index("11111")
+            card_order = [high_card]
+            return(card_order)
 
 
     if hand_value == 5: ## flush
@@ -299,42 +237,36 @@ def find_kicker(a_hand,hand_value):
                 if location == "1":
                     count += 1
                 if count > 2:
-                    the_best_card1 = 14 - suite.index("1")
-                    suite  = suite.replace("1","0",1)
-                    the_best_card2 = 14 - suite.index("1")
-                    suite  = suite.replace("1","0",1)
-                    kicker_sum = 0
-                    for y in range(0,3):
-                        kicker_sum += 14 - suite.index("1")
+                    card_order = []
+                    for y in range(0,5):
+                        a_card = 14 - suite.index("1")
+                        card_order.append(a_card)
                         suite  = suite.replace("1","0",1)
                     break
-        the_kicker = kicker(the_best_card1,kicker_sum,the_best_card2)
-        return(the_kicker)
+        return(card_order)
 
     if hand_value == 6: ## full house
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
-        the_best_card1 = 14 - oct_val.index("3")
+        three_card = 14 - oct_val.index("3")
         oct_val = oct_val.replace("3","1",1)
         if "3" in oct_val:
-            the_best_card2 = 14 - oct_val.index("3")
+            pair_card = 14 - oct_val.index("3")
         else:
-            the_best_card2 = 14 - oct_val.index("2")
-        kicker_sum = 0
-        the_kicker = kicker(the_best_card1,kicker_sum,the_best_card2)
-        return(the_kicker)
+            pair_card = 14 - oct_val.index("2")
+        card_order = [three_card,pair_card]
+        return(card_order)
 
     if hand_value == 7: ## four of a kind
 #        print(a_hand)
         oct_val = str(a_hand.crunch_octal())
         oct_val = oct_val[3:]
 #        print(oct_val)
-        the_best_card1 = 14 - oct_val.index("4")
+        four_card = 14 - oct_val.index("4")
         oct_val = oct_val.replace("2","1")
         oct_val = oct_val.replace("3","1")
-        kicker_sum = 14 - oct_val.index("1")
-        the_kicker = kicker(the_best_card1,kicker_sum)
-        return(the_kicker)
+        kicker_card = kicker_card = 14 - oct_val.index("1")
+        card_order = [four_card,kicker_card]
 
     if hand_value == 8: ## straight flush
         suites = a_hand.returnsuits()
@@ -345,196 +277,76 @@ def find_kicker(a_hand,hand_value):
                     count += 1
                 if count > 2:
                     if suite == "1000000001111":
-                        the_best_card1 = 5
+                        high_card = 5
+                        card_order = [high_card]
+                        return(card_order)
                     else:
-                        the_best_card1 = 14 - suite.index("1")
-                    break
-        the_kicker = kicker(the_best_card1)
-        return(the_kicker)
+                        high_card = 14-suite.index("11111")
+                        card_order = [high_card]
+                        return(card_order)
 
 def assign_all_hand_values(a_hand):
     a_hand.value = find_best_hand(a_hand)
-    a_kicker = find_kicker(a_hand,a_hand.value)
-    a_hand.card1 = a_kicker.best_card1
-    a_hand.card2 = a_kicker.best_card2
-    a_hand.kicker = a_kicker.kicker_sum
+    a_hand.card_order = find_card_order(a_hand,a_hand.value)
     return(a_hand)
 
+def compare_two_card_orders(hand1, hand2):
+    for card1, card2 in zip(hand1.card_order,hand2.card_order):
+        if card1 > card2:
+            return(hand1)
+        elif card2 > card1:
+            return(hand2)
+    return("tie")
+
 def compare_two_hands(first_hand,second_hand):
-    if first_hand.value == "Not Assigned":
-        first_hand.value = find_best_hand(first_hand)
-        first_kicker = find_kicker(first_hand,first_hand.value)
-        first_hand.card1 = first_kicker.best_card1
-        first_hand.card2 = first_kicker.best_card2
-        first_hand.kicker = first_kicker.kicker_sum
-        
-        second_hand.value = find_best_hand(second_hand)
-        if first_hand.value > second_hand.value:
-            return(first_hand)
-        elif second_hand.value > second_hand.value:
-            return(second_hand)
-        else:
-            second_kicker = find_kicker(second_hand,second_hand.value)
-            second_hand.card1 = second_kicker.best_card1
-            if first_hand.card1 > second_hand.card1:
-                return(first_hand)
-            elif second_hand.card1 > first_hand.card1:
-                return(second_hand)
-            else:
-                second_hand.card2 = second_kicker.best_card2
-                if first_hand.card2 > second_hand.card2:
-                    return(first_hand)
-                elif second_hand.card2 > first_hand.card2:
-                    return(second_hand)
-                else:
-                    second_hand.kicker = second_kicker.kicker_sum
-                    if first_hand.kicker > second_hand.kicker:
-                        return(first_hand)
-                    elif second_hand.kicker > first_hand.kicker:
-                        return(second_hand)
-                    else:
-                        return("Equal")
-    elif first_hand.value != "Not Assigned":
-        second_hand.value = find_best_hand(second_hand)
-        if first_hand.value > second_hand.value:
-            return(first_hand)
-        elif second_hand.value > second_hand.value:
-            return(second_hand)
-        else:
-            second_kicker = find_kicker(second_hand,second_hand.value)
-            second_hand.card1 = second_kicker.best_card1
-            if first_hand.card1 > second_hand.card1:
-                return(first_hand)
-            elif second_hand.card1 > first_hand.card1:
-                return(second_hand)
-            else:
-                second_hand.card2 = second_kicker.best_card2
-                if first_hand.card2 > second_hand.card2:
-                    return(first_hand)
-                elif second_hand.card2 > first_hand.card2:
-                    return(second_hand)
-                else:
-                    second_hand.kicker = second_kicker.kicker_sum
-                    if first_hand.kicker > second_hand.kicker:
-                        return(first_hand)
-                    elif second_hand.kicker > first_hand.kicker:
-                        return(second_hand)
-                    else:
-                        return("Equal")
+    first_hand.value = find_best_hand(first_hand)
+    second_hand.value = find_best_hand(second_hand)
+    if first_hand.value > second_hand.value:
+        return(first_hand)
+    elif second_hand.value > first_hand.value:
+        return(second_hand)
+    else:
+        first_hand.card_order = find_card_order(first_hand,first_hand.value)
+        second_hand.card_order = find_card_order(second_hand,second_hand.value)
+        winner = compare_two_card_orders(first_hand,second_hand)
+        return(winner)
 
 
 
-def compare_two_hands_dynamic(first_hand,second_hand,memo):
-    
-    if first_hand.value == "Not Assigned":
-        dynamic_values = find_best_hand_dynamic(first_hand,memo)
-        first_hand.value = dynamic_values[0]
-        memo = dynamic_values[1]
-        
-        dynamic_values = find_best_hand_dynamic(second_hand,memo)
-        second_hand.value = dynamic_values[0]
-        memo = dynamic_values[1]
-        if first_hand.value > second_hand.value:
-            return((first_hand,memo))
-        elif second_hand.value > second_hand.value:
-            return((second_hand,memo))
-        else:
-            first_kicker = find_kicker(first_hand,first_hand.value)
-            first_hand.card1 = first_kicker.best_card1
-            first_hand.card2 = first_kicker.best_card2
-            first_hand.kicker = first_kicker.kicker_sum
-        
-            second_kicker = find_kicker(second_hand,second_hand.value)
-            second_hand.card1 = second_kicker.best_card1
 
-            if first_hand.card1 > second_hand.card1:
-                return((first_hand,memo))
-            elif second_hand.card1 > first_hand.card1:
-                return((second_hand,memo))
-            else:
-                second_hand.card2 = second_kicker.best_card2
-                if first_hand.card2 > second_hand.card2:
-                    return((first_hand,memo))
-                elif second_hand.card2 > first_hand.card2:
-                    return((second_hand,memo))
-                else:
-                    second_hand.kicker = second_kicker.kicker_sum
-                    if first_hand.kicker > second_hand.kicker:
-                        return((first_hand,memo))
-                    elif second_hand.kicker > first_hand.kicker:
-                        return((second_hand,memo))
-                    else:
-                        return(("Equal",memo))
-    elif first_hand.value != "Not Assigned":
-        dynamic_values = find_best_hand_dynamic(second_hand,memo)
-        second_hand.value = dynamic_values[0]
-        memo = dynamic_values[1]
-        if first_hand.value > second_hand.value:
-            return((first_hand,memo))
-        elif second_hand.value > second_hand.value:
-            return((second_hand,memo))
-        else:
-            second_kicker = find_kicker(second_hand,second_hand.value)
-            second_hand.card1 = second_kicker.best_card1
-            if first_hand.card1 > second_hand.card1:
-                return((first_hand,memo))
-            elif second_hand.card1 > first_hand.card1:
-                return((second_hand,memo))
-            else:
-                second_hand.card2 = second_kicker.best_card2
-                if first_hand.card2 > second_hand.card2:
-                    return((first_hand,memo))
-                elif second_hand.card2 > first_hand.card2:
-                    return((second_hand,memo))
-                else:
-                    second_hand.kicker = second_kicker.kicker_sum
-                    if first_hand.kicker > second_hand.kicker:
-                        return((first_hand,memo))
-                    elif second_hand.kicker > first_hand.kicker:
-                        return((second_hand,memo))
-                    else:
-                        return(("Equal",memo))
-
-## Test Bench
+# Test Bench
 #two_card_hand = hand(deck[0:2])
-#straight_flush_hand = hand(deck[0:4]+[deck[4]])
+#straight_flush_hand = hand(deck[0:4]+[deck[4],deck[5],deck[20]])
 #pair_hand = hand([deck[0],deck[13],deck[50]]+deck[20:23])
-#straight_hand = hand([deck[13],deck[17]]+deck[1:5])
+#pair_hand2 = hand([deck[0],deck[13],deck[51]]+deck[20:23])
+#straight_hand = hand([deck[13],deck[25],deck[17]]+deck[1:5])
 #straight_hand_ace_low = hand(deck[0:4]+[deck[25]])
 #four_of_a_kind_hand = hand([deck[0],deck[13],deck[26],deck[39],deck[40],deck[51]])
-#full_house_hand = hand([deck[0],deck[13],deck[26],deck[1],deck[40],deck[14]])
-#flush_hand = hand([deck[0],deck[51]]+deck[2:6])
-#two_pair_hand = hand([deck[0],deck[13],deck[12],deck[25],deck[1]])
+#full_house_hand = hand([deck[0],deck[13],deck[26],deck[1],deck[40],deck[14],deck[20]])
+#flush_hand = hand([deck[0],deck[12]]+deck[2:6])
+#two_pair_hand = hand([deck[0],deck[13],deck[12],deck[25],deck[1],deck[30]])
 #three_of_a_kind_hand = hand([deck[0],deck[13],deck[39]]+deck[20:23])
-#high_card_hand = hand([deck[0],deck[1],deck[37]]+deck[20:23])
+#high_card_hand = hand([deck[0],deck[1],deck[37],deck[2],deck[3],deck[18],deck[21]])
 ##
-#this_hand = flush_hand + deck[10]
-#memo = {}
-#this_hand.value = find_best_hand(this_hand)
-#print(this_hand.cards)
-#print(this_hand.value)
-#the_kicker = find_kicker(this_hand,this_hand.value)
-#print(the_kicker)
 
 
-#this_hand = this_hand +[deck[14],deck[12]]
+
+#first_hand = straight_flush_hand
+#print(first_hand)
+#first_hand.value = find_best_hand(this_hand)
+#print(first_hand.value)
 #
-#print(this_hand)
-#value_test = find_best_hand_dynamic(this_hand,memo)
-#print(value_test)
-#print(memo)
 #
-#test = find_kicker(this_hand,value_test)
-#print(test)
+#first_hand.card_order = find_card_order(this_hand,value_test)
+#print(first_hand.card_order)
 
 
 #first_hand = pair_hand
 #print(("first hand: ",first_hand))
-#second_hand = high_card_hand
+#second_hand = pair_hand2
 #print(("second hand: ",second_hand))
 #
-#memo = {}
-#test = compare_two_hands_dynamic(first_hand,second_hand,memo)
+#test = compare_two_hands(first_hand,second_hand)
 #print(test)
 
 
