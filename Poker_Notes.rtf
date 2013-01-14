@@ -1,6 +1,8 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf340
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Bold;}
-{\colortbl;\red255\green255\blue255;}
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Bold;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red170\green13\blue145;\red196\green26\blue22;\red0\green116\blue0;
+\red28\green0\blue207;}
 \margl1440\margr1440\vieww9000\viewh8400\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
@@ -111,4 +113,33 @@ indices of cards in the deck with values:\
 (48, |11, Spades|)\
 (49, |12, Spades|)\
 (50, |13, Spades|)\
-(51, |14, Spades|)}
+(51, |14, Spades|)\
+\
+\pard\tx529\pardeftab529\pardirnatural
+
+\f2\b0 \cf0                     \cf2 elif\cf0  decision == \cf3 "raise"\cf0  \cf2 and\cf0  number_of_raises < raise_cap:\
+                        \cf4 ## update player info\cf0 \
+                        player_raise = raise_amount + player.owes\
+                        player.money = player.money - player_raise\
+                        player.current_bet = player.current_bet + player_raise\
+                        player.owes = \cf5 0\cf0 \
+                        \
+                        \cf4 ## update cummunity info\cf0 \
+                        current_bet += raise_amount\
+                        pot += player_raise\
+                        number_of_raises += \cf5 1\cf0 \
+                        \
+                        action = \cf3 "\{\} raises with \{\}. Pot equals \{\}"\cf0 .format(player.name,player.hand,pot)\
+                        pots_right = False\
+                    \
+                    \cf2 else\cf0 : \cf4 ##decision == "call" or (decision == "raise" and number_of_raises == raise_cap)\cf0 \
+                        pot += player.owes\
+                        player.money = player.money - player.owes\
+                        player.current_bet = player.owes\
+                        \cf2 if\cf0  player.owes == \cf5 0\cf0 :\
+                            action = \cf3 "\{\} checks with \{\}. Pot equals \{\}"\cf0 .format(player.name,player.hand, pot)\
+                        \cf2 else\cf0 :\
+                            action = \cf3 "\{\} calls with \{\}. Pot equals \{\}"\cf0 .format(player.name,player.hand, pot)\
+                        player.owes = \cf5 0\cf0 \
+                        pots_right = True\
+ }

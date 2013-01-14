@@ -311,6 +311,23 @@ def compare_two_hands(first_hand,second_hand):
         winner = compare_two_card_orders(first_hand,second_hand)
         return(winner)
 
+## Just an object to make passing around hand info easier
+class hand_info_class:
+    
+    def __init__(self,raise_amount,raise_cap,number_of_raises=0,print_action=False,print_cards=False,print_winner=False, current_deck=None,community_cards=[],current_bet=None,remove_list=[],players_left=None,pot=None):
+        
+        self.raise_amount = raise_amount
+        self.raise_cap = raise_cap
+        self.number_of_raises = number_of_raises
+        self.print_action = print_action
+        self.print_cards = print_cards
+        self.print_winner = print_winner
+        self.current_deck = current_deck
+        self.community_cards = community_cards
+        self.current_bet = current_bet
+        self.remove_list = remove_list
+        self.players_left = players_left
+        self.pot = pot
 
 
 

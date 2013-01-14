@@ -10,8 +10,8 @@ class player:
         self.current_bet = player_current_bet
         self.owes = owes
     
-    def strategy(self,pot,community_cards,the_current_bet,number_of_players_left):
-        result = self.player_strategy(hand=self.hand,community_cards=community_cards,pot=pot,the_current_bet=the_current_bet, player_current_bet = self.current_bet, owes = self.owes,number_of_players_left=number_of_players_left)
+    def strategy(self,the_hand_info,number_of_players_left):
+        result = self.player_strategy(the_hand_info=the_hand_info, hand=self.hand, player_current_bet = self.current_bet, owes = self.owes,number_of_players_left=number_of_players_left)
         return(result)
     
     def __str__(self):
